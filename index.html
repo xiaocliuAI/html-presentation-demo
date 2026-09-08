@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f3ea">
+  <meta name="robots" content="noindex,nofollow">
+  <title>三家门店月度经营复盘 · HTML Presentation Demo</title>
+  <style>
+    :root {
+      --ink: #17211b;
+      --paper: #f7f3ea;
+      --card: #fffdf8;
+      --orange: #f28c28;
+      --green: #1f6b4f;
+      --muted: #68746d;
+      --line: rgba(23, 33, 27, .13);
+      --soft-orange: #fff0df;
+      --soft-green: #e8f1ec;
+      --shadow: 0 22px 70px rgba(23, 33, 27, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(242, 140, 40, .12), transparent 31%),
+        radial-gradient(circle at 88% 82%, rgba(31, 107, 79, .12), transparent 28%),
+        var(--paper);
+    }
+
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-content: center;
+      gap: clamp(20px, 3vw, 42px);
+      padding: clamp(64px, 7vw, 112px) clamp(24px, 7vw, 108px) clamp(82px, 8vw, 112px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(4%);
+      transition: opacity .45s ease, transform .55s cubic-bezier(.22,.8,.25,1);
+      overflow: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0);
+      z-index: 2;
+    }
+
+    .slide.leaving { transform: translateX(-3%); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      width: fit-content;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .62);
+      border: 1px solid var(--line);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 5px rgba(242, 140, 40, .14);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 1000px;
+      font-size: clamp(48px, 7.6vw, 112px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+
+    h2 {
+      max-width: 1000px;
+      font-size: clamp(36px, 5vw, 72px);
+      line-height: 1.05;
+      letter-spacing: -.045em;
+      overflow-wrap: anywhere;
+    }
+
+    h3 {
+      font-size: clamp(20px, 2vw, 30px);
+      line-height: 1.18;
+    }
+
+    .lede {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 28px);
+      line-height: 1.55;
+    }
+
+    .accent { color: var(--orange); }
+    .green { color: var(--green); }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr);
+      align-items: end;
+      gap: clamp(30px, 6vw, 92px);
+    }
+
+    .hero-copy {
+      display: grid;
+      gap: 28px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 330px;
+      padding: 34px;
+      border: 1px solid rgba(255, 255, 255, .65);
+      border-radius: 34px;
+      background: linear-gradient(145deg, rgba(255,255,255,.84), rgba(255,255,255,.44));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      right: -78px;
+      bottom: -98px;
+      border-radius: 50%;
+      background: var(--orange);
+      opacity: .18;
+    }
+
+    .hero-card .big-number {
+      display: block;
+      margin: 48px 0 8px;
+      font-size: clamp(76px, 10vw, 142px);
+      font-weight: 900;
+      letter-spacing: -.08em;
+      color: var(--green);
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .data-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .segmented {
+      display: inline-flex;
+      gap: 5px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.6);
+    }
+
+    .segmented button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .segmented button.active {
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 5px 14px rgba(23, 33, 27, .18);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .kpi {
+      min-height: 142px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255, 253, 248, .78);
+    }
+
+    .kpi span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .kpi strong {
+      display: block;
+      margin: 14px 0 5px;
+      font-size: clamp(28px, 3vw, 44px);
+      letter-spacing: -.05em;
+    }
+
+    .kpi small {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .chart-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(260px, .55fr);
+      align-items: stretch;
+      gap: 20px;
+      padding: 24px;
+      border-radius: 30px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 15px 50px rgba(23, 33, 27, .08);
+    }
+
+    .chart-wrap {
+      min-height: 255px;
+      display: grid;
+      align-items: end;
+    }
+
+    #trendChart {
+      width: 100%;
+      height: 250px;
+      overflow: visible;
+    }
+
+    #trendLine {
+      fill: none;
+      stroke: var(--orange);
+      stroke-width: 6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: d .35s ease;
+    }
+
+    .chart-point {
+      fill: var(--card);
+      stroke: var(--orange);
+      stroke-width: 5;
+    }
+
+    .insight {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      padding: 28px;
+      border-radius: 24px;
+      background: var(--soft-orange);
+    }
+
+    .insight b {
+      font-size: 18px;
+      color: #9b5513;
+    }
+
+    .insight strong {
+      font-size: clamp(26px, 3vw, 42px);
+      line-height: 1.15;
+      letter-spacing: -.04em;
+    }
+
+    .insight p {
+      color: #785534;
+      line-height: 1.55;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .store-card {
+      position: relative;
+      min-height: 360px;
+      padding: 28px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: rgba(255, 253, 248, .76);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .store-card:hover, .store-card:focus-within {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+      border-color: rgba(242, 140, 40, .45);
+    }
+
+    .store-card.best::before {
+      content: "本月领先";
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--green);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .store-card .store-id {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+
+    .store-card h3 { margin: 16px 0 28px; }
+
+    .metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .metric-row:last-child { border-bottom: 0; }
+    .metric-row strong { color: var(--ink); }
+
+    .comparison-takeaway {
+      padding: 22px 26px;
+      border-radius: 22px;
+      background: var(--soft-green);
+      color: var(--green);
+      font-size: clamp(18px, 2vw, 27px);
+      font-weight: 800;
+      line-height: 1.45;
+    }
+
+    .visual-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, .92fr);
+      align-items: center;
+      gap: clamp(28px, 5vw, 80px);
+    }
+
+    .visual-frame {
+      overflow: hidden;
+      border-radius: 32px;
+      background: white;
+      box-shadow: var(--shadow);
+      transform: rotate(-1.5deg);
+    }
+
+    .visual-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .visual-copy {
+      display: grid;
+      gap: 22px;
+      min-width: 0;
+    }
+
+    .check-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .check-list li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      align-items: start;
+      gap: 13px;
+      color: var(--muted);
+      font-size: clamp(16px, 1.6vw, 22px);
+      line-height: 1.5;
+    }
+
+    .check-list li::before {
+      content: "✓";
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--soft-green);
+      color: var(--green);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .web-difference {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .difference-card {
+      padding: 30px;
+      min-height: 245px;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+
+    .difference-card .icon {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      margin-bottom: 28px;
+      border-radius: 17px;
+      background: var(--soft-orange);
+      color: var(--orange);
+      font-size: 23px;
+      font-weight: 900;
+    }
+
+    .difference-card p {
+      margin-top: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .action-card {
+      padding: clamp(28px, 4vw, 54px);
+      border-radius: 34px;
+      background: var(--ink);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .action-card h2 {
+      max-width: 760px;
+      margin: 22px 0;
+    }
+
+    .action-card p {
+      max-width: 690px;
+      color: rgba(255,255,255,.68);
+      font-size: clamp(17px, 1.7vw, 23px);
+      line-height: 1.55;
+    }
+
+    .next-list {
+      display: grid;
+      gap: 12px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: rgba(255,255,255,.58);
+    }
+
+    .next-item {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border-radius: 19px;
+      background: var(--card);
+    }
+
+    .next-item strong:first-child {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--soft-orange);
+      color: var(--orange);
+    }
+
+    .next-item span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .controls {
+      position: fixed;
+      z-index: 20;
+      left: clamp(18px, 4vw, 56px);
+      right: clamp(18px, 4vw, 56px);
+      bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .progress-track {
+      width: min(260px, 100%);
+      height: 5px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(23, 33, 27, .12);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 16.666%;
+      border-radius: inherit;
+      background: var(--orange);
+      transition: width .35s ease;
+    }
+
+    .slide-count {
+      color: var(--muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .nav {
+      justify-self: end;
+      display: flex;
+      gap: 9px;
+      pointer-events: auto;
+    }
+
+    .nav button {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(255,255,255,.82);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(23,33,27,.09);
+    }
+
+    .nav button:disabled {
+      opacity: .34;
+      cursor: default;
+    }
+
+    .hint {
+      position: fixed;
+      top: 22px;
+      right: clamp(18px, 4vw, 56px);
+      z-index: 20;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { min-height: 100dvh; height: auto; }
+      .slide {
+        position: relative;
+        display: none;
+        min-height: 100dvh;
+        padding-top: 76px;
+        overflow: visible;
+      }
+      .slide.active { display: grid; }
+      .hero-grid, .chart-card, .visual-grid, .action-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare-grid, .web-difference { grid-template-columns: 1fr; }
+      .store-card { min-height: auto; }
+      .hint { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      h1 { font-size: 48px; }
+      h2 { font-size: 34px; }
+      .slide { padding-inline: 18px; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: 1fr auto; }
+      .slide-count { display: none; }
+      .nav button { width: 43px; height: 43px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide active" aria-label="封面">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow"><span class="dot"></span>经营复盘 · 交互演示</span>
+          <h1>三家门店，<span class="accent">问题不在销售额。</span></h1>
+          <p class="lede">这不是一份把 PPT 搬进浏览器的文件。数据能切换、结论能展开、活动视觉能直接嵌入。</p>
+          <p class="data-note">本案例全部为虚构演示数据，不代表任何真实品牌或门店。</p>
+        </div>
+        <aside class="hero-card">
+          <span class="eyebrow">本月核心信号</span>
+          <strong class="big-number">+18%</strong>
+          <p>午后订单增长，但复购没有同步上升。下一步不是继续打折，而是把新客留下来。</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="经营总览">
+      <div class="toolbar">
+        <div>
+          <span class="eyebrow"><span class="dot"></span>01 · 报表数据</span>
+          <h2 style="margin-top:18px">先看变化，再看数字</h2>
+        </div>
+        <div class="segmented" role="group" aria-label="数据周期">
+          <button type="button" data-period="month" class="active">本月</button>
+          <button type="button" data-period="quarter">本季度</button>
+          <button type="button" data-period="year">全年</button>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <article class="kpi"><span>营业额</span><strong id="revenue">¥428k</strong><small id="revenueDelta">↑ 12.4%</small></article>
+        <article class="kpi"><span>订单量</span><strong id="orders">8,620</strong><small id="ordersDelta">↑ 9.8%</small></article>
+        <article class="kpi"><span>客单价</span><strong id="ticket">¥49.7</strong><small id="ticketDelta">↑ 2.3%</small></article>
+        <article class="kpi"><span>30 日复购</span><strong id="repeat">31%</strong><small id="repeatDelta" style="color:#a25231">↓ 1.8%</small></article>
+      </div>
+      <div class="chart-card">
+        <div class="chart-wrap">
+          <svg id="trendChart" viewBox="0 0 760 250" role="img" aria-label="营业额趋势图">
+            <g stroke="rgba(23,33,27,.10)" stroke-width="1">
+              <line x1="40" y1="35" x2="730" y2="35"/>
+              <line x1="40" y1="95" x2="730" y2="95"/>
+              <line x1="40" y1="155" x2="730" y2="155"/>
+              <line x1="40" y1="215" x2="730" y2="215"/>
+            </g>
+            <path id="trendLine" d="M55 188 L180 165 L305 174 L430 128 L555 91 L680 52"/>
+            <g id="trendPoints"></g>
+          </svg>
+        </div>
+        <aside class="insight">
+          <b>AI 先指出异常</b>
+          <strong id="insightTitle">销售涨了，复购却掉了</strong>
+          <p id="insightBody">活动吸引了新客，但没有形成第二次消费。下一页继续找是哪家店拖了后腿。</p>
+        </aside>
+      </div>
+      <p class="data-note">演示交互：点击“本月 / 本季度 / 全年”，数字、曲线和结论会一起变化。</p>
+    </section>
+
+    <section class="slide" aria-label="门店对比">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>02 · 对比分析</span>
+        <h2 style="margin-top:18px">同样增长，质量完全不同</h2>
+      </div>
+      <div class="compare-grid">
+        <article class="store-card best">
+          <span class="store-id">STORE A</span>
+          <h3>中央公园店</h3>
+          <div class="metric-row"><span>营业额</span><strong>¥176k</strong></div>
+          <div class="metric-row"><span>30 日复购</span><strong>39%</strong></div>
+          <div class="metric-row"><span>活动券核销</span><strong>68%</strong></div>
+          <div class="metric-row"><span>判断</span><strong class="green">值得复制</strong></div>
+        </article>
+        <article class="store-card">
+          <span class="store-id">STORE B</span>
+          <h3>大学城店</h3>
+          <div class="metric-row"><span>营业额</span><strong>¥144k</strong></div>
+          <div class="metric-row"><span>30 日复购</span><strong>27%</strong></div>
+          <div class="metric-row"><span>活动券核销</span><strong>82%</strong></div>
+          <div class="metric-row"><span>判断</span><strong class="accent">优惠依赖</strong></div>
+        </article>
+        <article class="store-card">
+          <span class="store-id">STORE C</span>
+          <h3>商务区店</h3>
+          <div class="metric-row"><span>营业额</span><strong>¥108k</strong></div>
+          <div class="metric-row"><span>30 日复购</span><strong>24%</strong></div>
+          <div class="metric-row"><span>活动券核销</span><strong>51%</strong></div>
+          <div class="metric-row"><span>判断</span><strong>午后偏弱</strong></div>
+        </article>
+      </div>
+      <div class="comparison-takeaway">大学城店不是卖得少，而是顾客更容易被优惠带来，也更容易在优惠结束后离开。</div>
+      <p class="data-note">所有门店与数字均为虚构演示数据。</p>
+    </section>
+
+    <section class="slide" aria-label="视觉方案">
+      <div class="visual-grid">
+        <figure class="visual-frame">
+          <img src="assets/autumn-campaign.svg" alt="秋日咖啡节活动主视觉示例">
+        </figure>
+        <div class="visual-copy">
+          <span class="eyebrow"><span class="dot"></span>03 · 设计图嵌入</span>
+          <h2>图不是附件，<span class="green">就是演示的一部分</span></h2>
+          <p class="lede">设计稿、产品图、视频和网页都能放进同一份演示里，不用在会议中来回切窗口。</p>
+          <ul class="check-list">
+            <li>同一视觉自动适配大屏和手机</li>
+            <li>点击即可跳到活动落地页或数据详情</li>
+            <li>改一张源图，所有打开链接的人看到新版本</li>
+          </ul>
+          <p class="data-note">图中品牌、活动和权益均为设计示例。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="HTML 演示的差异">
+      <div>
+        <span class="eyebrow"><span class="dot"></span>04 · 为什么用 HTML</span>
+        <h2 style="margin-top:18px">真正的差别，不只是转场更酷</h2>
+      </div>
+      <div class="web-difference">
+        <article class="difference-card">
+          <div class="icon">↻</div>
+          <h3>数据会动</h3>
+          <p>筛选、切换、展开都发生在当前页面。观众不只看结论，还能自己验证。</p>
+        </article>
+        <article class="difference-card">
+          <div class="icon">↗</div>
+          <h3>一个链接就能发</h3>
+          <p>浏览器直接打开，适合远程分享、作品集、路演预览和会后复看。</p>
+        </article>
+        <article class="difference-card">
+          <div class="icon">⌁</div>
+          <h3>内容能复用</h3>
+          <p>同一套组件可继续生成周报、客户方案和产品发布页，不必每次从空白页开始。</p>
+        </article>
+      </div>
+      <p class="lede">但它不是所有场景都更省：如果现场必须离线、同事只会改 PPT、或需要逐页打印，传统文件仍然更稳。</p>
+    </section>
+
+    <section class="slide" aria-label="下一步行动">
+      <div class="action-grid">
+        <article class="action-card">
+          <span class="eyebrow" style="color:#ffd3aa;background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)">05 · 本月动作</span>
+          <h2>先复制中央公园店的留客动作，不继续扩大折扣。</h2>
+          <p>把活动预算从“所有人第二杯半价”移到“新客 7 天内第二次到店”，用两周验证复购变化。</p>
+        </article>
+        <aside class="next-list">
+          <div class="next-item">
+            <strong>1</strong>
+            <div><strong>复制话术</strong><span>统一新客入会与二次到店提醒</span></div>
+          </div>
+          <div class="next-item">
+            <strong>2</strong>
+            <div><strong>缩小实验</strong><span>先在大学城店跑两周，不全店铺开</span></div>
+          </div>
+          <div class="next-item">
+            <strong>3</strong>
+            <div><strong>只看一个数</strong><span>30 日复购是否回到 32% 以上</span></div>
+          </div>
+        </aside>
+      </div>
+      <p class="data-note">行动建议仅用于展示 HTML presentation 的叙事能力，不构成真实经营建议。</p>
+    </section>
+  </main>
+
+  <div class="hint">← → / 空格翻页 · 手机可左右滑动</div>
+  <footer class="controls" aria-label="演示导航">
+    <div class="progress-track" aria-hidden="true"><div class="progress-fill"></div></div>
+    <div class="slide-count"><span id="currentSlide">01</span> / <span id="totalSlides">06</span></div>
+    <nav class="nav">
+      <button id="prevButton" type="button" aria-label="上一页">←</button>
+      <button id="nextButton" type="button" aria-label="下一页">→</button>
+    </nav>
+  </footer>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const progress = document.querySelector(".progress-fill");
+    const currentLabel = document.querySelector("#currentSlide");
+    const totalLabel = document.querySelector("#totalSlides");
+    const prevButton = document.querySelector("#prevButton");
+    const nextButton = document.querySelector("#nextButton");
+    let index = 0;
+    let touchStartX = 0;
+
+    totalLabel.textContent = String(slides.length).padStart(2, "0");
+
+    function showSlide(nextIndex) {
+      const bounded = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides[index].classList.remove("active");
+      index = bounded;
+      slides[index].classList.add("active");
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      currentLabel.textContent = String(index + 1).padStart(2, "0");
+      prevButton.disabled = index === 0;
+      nextButton.disabled = index === slides.length - 1;
+      history.replaceState(null, "", `#${index + 1}`);
+    }
+
+    prevButton.addEventListener("click", () => showSlide(index - 1));
+    nextButton.addEventListener("click", () => showSlide(index + 1));
+
+    document.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        showSlide(index + 1);
+      }
+      if (["ArrowLeft", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        showSlide(index - 1);
+      }
+      if (event.key === "Home") showSlide(0);
+      if (event.key === "End") showSlide(slides.length - 1);
+    });
+
+    document.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (event) => {
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) < 55) return;
+      showSlide(index + (delta < 0 ? 1 : -1));
+    }, { passive: true });
+
+    const periods = {
+      month: {
+        revenue: "¥428k", revenueDelta: "↑ 12.4%",
+        orders: "8,620", ordersDelta: "↑ 9.8%",
+        ticket: "¥49.7", ticketDelta: "↑ 2.3%",
+        repeat: "31%", repeatDelta: "↓ 1.8%",
+        points: [[55,188],[180,165],[305,174],[430,128],[555,91],[680,52]],
+        title: "销售涨了，复购却掉了",
+        body: "活动吸引了新客，但没有形成第二次消费。下一页继续找是哪家店拖了后腿。"
+      },
+      quarter: {
+        revenue: "¥1.18m", revenueDelta: "↑ 8.6%",
+        orders: "23,910", ordersDelta: "↑ 7.1%",
+        ticket: "¥49.3", ticketDelta: "↑ 1.4%",
+        repeat: "33%", repeatDelta: "↑ 0.6%",
+        points: [[55,176],[180,158],[305,144],[430,121],[555,109],[680,88]],
+        title: "季度增长更稳，但门店差距扩大",
+        body: "中央公园店贡献了主要增量。大学城店订单增长快，复购仍明显落后。"
+      },
+      year: {
+        revenue: "¥4.36m", revenueDelta: "↑ 15.2%",
+        orders: "86,420", ordersDelta: "↑ 12.9%",
+        ticket: "¥50.5", ticketDelta: "↑ 2.1%",
+        repeat: "34%", repeatDelta: "↑ 2.4%",
+        points: [[55,204],[180,187],[305,149],[430,158],[555,112],[680,69]],
+        title: "全年方向正确，短期活动需要修正",
+        body: "品牌自然复购在提升，但近期优惠拉来的新客质量偏低，不能只看本月销售额。"
+      }
+    };
+
+    function renderTrend(points) {
+      const line = document.querySelector("#trendLine");
+      const dots = document.querySelector("#trendPoints");
+      line.setAttribute("d", points.map(([x, y], i) => `${i ? "L" : "M"}${x} ${y}`).join(" "));
+      dots.innerHTML = points.map(([x, y]) => `<circle class="chart-point" cx="${x}" cy="${y}" r="7"/>`).join("");
+    }
+
+    function setPeriod(period) {
+      const data = periods[period];
+      ["revenue", "orders", "ticket", "repeat"].forEach((key) => {
+        document.querySelector(`#${key}`).textContent = data[key];
+        document.querySelector(`#${key}Delta`).textContent = data[`${key}Delta`];
+      });
+      document.querySelector("#repeatDelta").style.color = period === "month" ? "#a25231" : "#1f6b4f";
+      document.querySelector("#insightTitle").textContent = data.title;
+      document.querySelector("#insightBody").textContent = data.body;
+      renderTrend(data.points);
+      document.querySelectorAll("[data-period]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.period === period);
+      });
+    }
+
+    document.querySelectorAll("[data-period]").forEach((button) => {
+      button.addEventListener("click", () => setPeriod(button.dataset.period));
+    });
+
+    const hashIndex = Number(location.hash.replace("#", "")) - 1;
+    renderTrend(periods.month.points);
+    showSlide(Number.isInteger(hashIndex) ? hashIndex : 0);
+  </script>
+</body>
+</html>

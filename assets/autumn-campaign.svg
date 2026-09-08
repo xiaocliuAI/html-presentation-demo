@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">秋日咖啡节活动主视觉</title>
+  <desc id="desc">奶油色背景上放置橙色咖啡杯、绿色叶片和活动文字的设计示例</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7F3EA"/>
+      <stop offset="1" stop-color="#F4D7B6"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#17211B" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" rx="48" fill="url(#bg)"/>
+  <circle cx="1015" cy="122" r="190" fill="#F28C28" opacity=".13"/>
+  <circle cx="110" cy="720" r="260" fill="#1F6B4F" opacity=".1"/>
+  <g fill="#1F6B4F" opacity=".88">
+    <ellipse cx="870" cy="195" rx="38" ry="105" transform="rotate(42 870 195)"/>
+    <ellipse cx="960" cy="245" rx="34" ry="94" transform="rotate(70 960 245)"/>
+    <ellipse cx="242" cy="610" rx="35" ry="100" transform="rotate(-52 242 610)"/>
+  </g>
+  <g filter="url(#shadow)">
+    <path d="M444 270h305v267c0 91-65 154-152 154s-153-63-153-154z" fill="#F28C28"/>
+    <path d="M749 335h51c77 0 126 45 126 110s-50 110-126 110h-51v-62h45c38 0 65-17 65-48s-27-48-65-48h-45z" fill="#F28C28"/>
+    <ellipse cx="597" cy="269" rx="153" ry="36" fill="#17211B"/>
+    <ellipse cx="597" cy="269" rx="124" ry="24" fill="#8B5635"/>
+    <path d="M536 209c-28-42 31-72 5-117M610 202c-29-43 31-72 5-117M678 210c-28-42 31-72 5-117" fill="none" stroke="#FFF8EF" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+  </g>
+  <g fill="#17211B" font-family="Arial, 'PingFang SC', sans-serif">
+    <text x="80" y="112" font-size="30" font-weight="700" letter-spacing="6">SEPTEMBER SPECIAL</text>
+    <text x="80" y="174" font-size="60" font-weight="900">秋日咖啡节</text>
+    <text x="80" y="218" font-size="25" fill="#68746D">第二杯半价 · 会员双倍积分</text>
+    <text x="80" y="744" font-size="22" fill="#68746D">活动视觉示例 · 非真实品牌物料</text>
+  </g>
+</svg>
