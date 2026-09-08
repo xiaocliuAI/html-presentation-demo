@@ -20,6 +20,19 @@
       --shadow: 0 22px 70px rgba(23, 33, 27, .12);
     }
 
+    [data-theme="dark"] {
+      --ink: #f4f0e7;
+      --paper: #101713;
+      --card: #18231d;
+      --orange: #ff9a3d;
+      --green: #7fcaa8;
+      --muted: #a9b6ae;
+      --line: rgba(244, 240, 231, .14);
+      --soft-orange: #392719;
+      --soft-green: #173328;
+      --shadow: 0 22px 70px rgba(0, 0, 0, .3);
+    }
+
     * { box-sizing: border-box; }
 
     html, body {
@@ -36,6 +49,13 @@
       background:
         radial-gradient(circle at 10% 10%, rgba(242, 140, 40, .12), transparent 31%),
         radial-gradient(circle at 88% 82%, rgba(31, 107, 79, .12), transparent 28%),
+        var(--paper);
+    }
+
+    [data-theme="dark"] body {
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 154, 61, .13), transparent 31%),
+        radial-gradient(circle at 88% 82%, rgba(127, 202, 168, .12), transparent 28%),
         var(--paper);
     }
 
@@ -150,6 +170,13 @@
       backdrop-filter: blur(16px);
     }
 
+    [data-theme="dark"] .hero-card,
+    [data-theme="dark"] .segmented,
+    [data-theme="dark"] .controls button {
+      background: rgba(24, 35, 29, .84);
+      border-color: var(--line);
+    }
+
     .hero-card::after {
       content: "";
       position: absolute;
@@ -228,6 +255,12 @@
       border: 1px solid var(--line);
       border-radius: 24px;
       background: rgba(255, 253, 248, .78);
+    }
+
+    [data-theme="dark"] .kpi,
+    [data-theme="dark"] .store-card,
+    [data-theme="dark"] .next-list {
+      background: rgba(24, 35, 29, .82);
     }
 
     .kpi span {
@@ -313,6 +346,11 @@
       line-height: 1.55;
     }
 
+    [data-theme="dark"] .insight b,
+    [data-theme="dark"] .insight p {
+      color: #ffc18a;
+    }
+
     .compare-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -393,6 +431,10 @@
       background: white;
       box-shadow: var(--shadow);
       transform: rotate(-1.5deg);
+    }
+
+    [data-theme="dark"] .visual-frame {
+      background: #18231d;
     }
 
     .visual-frame img {
@@ -484,6 +526,10 @@
       background: var(--ink);
       color: white;
       box-shadow: var(--shadow);
+    }
+
+    [data-theme="dark"] .action-card {
+      background: #080d0a;
     }
 
     .action-card h2 {
@@ -605,6 +651,30 @@
       font-size: 12px;
     }
 
+    .theme-toggle {
+      position: fixed;
+      top: 18px;
+      left: clamp(18px, 4vw, 56px);
+      z-index: 30;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(23,33,27,.08);
+      backdrop-filter: blur(12px);
+    }
+
+    [data-theme="dark"] .theme-toggle {
+      background: rgba(24,35,29,.84);
+    }
+
     @media (max-width: 900px) {
       body { overflow: auto; }
       .deck { min-height: 100dvh; height: auto; }
@@ -621,6 +691,7 @@
       .compare-grid, .web-difference { grid-template-columns: 1fr; }
       .store-card { min-height: auto; }
       .hint { display: none; }
+      .theme-toggle { top: 14px; }
     }
 
     @media (max-width: 560px) {
@@ -642,6 +713,7 @@
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换明暗模式">◐ <span>切换暗色</span></button>
   <main class="deck" aria-live="polite">
     <section class="slide active" aria-label="封面">
       <div class="hero-grid">
@@ -821,8 +893,20 @@
     const totalLabel = document.querySelector("#totalSlides");
     const prevButton = document.querySelector("#prevButton");
     const nextButton = document.querySelector("#nextButton");
+    const themeToggle = document.querySelector("#themeToggle");
     let index = 0;
     let touchStartX = 0;
+
+    function setTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      themeToggle.querySelector("span").textContent = theme === "dark" ? "切换亮色" : "切换暗色";
+      themeToggle.setAttribute("aria-pressed", String(theme === "dark"));
+      localStorage.setItem("presentation-theme", theme);
+    }
+
+    themeToggle.addEventListener("click", () => {
+      setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    });
 
     totalLabel.textContent = String(slides.length).padStart(2, "0");
 
@@ -921,6 +1005,7 @@
     });
 
     const hashIndex = Number(location.hash.replace("#", "")) - 1;
+    setTheme(localStorage.getItem("presentation-theme") || "light");
     renderTrend(periods.month.points);
     showSlide(Number.isInteger(hashIndex) ? hashIndex : 0);
   </script>
